@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Angular select用法</title>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/underscore/underscore.js"></script>
+</head>
+<body ng-app="demo">
+<div ng-controller="DemoController as DemoCtrl">
+    <h4>1、数组结构数据，value字段是选择的值，text字段是视图上显示的值，根据group字段进行分组，根据value字段的首字母进行排序。</h4>
+
+    <form name="myForm" novalidate>
+        <label for="bookSelect1">正序</label>
+        <select id="bookSelect1"
+                name="bookSelect"
+                ng-options="option.value as option.text group by option.group for option in DemoCtrl.model.options | orderBy: '+value[0]'"
+                ng-model="DemoCtrl.model.optionValue"
+                ng-required="true"
+                ng-change="DemoCtrl.fn.optionValueChange(DemoCtrl.model.optionValue)">
+        </select>
+        <label for="bookSelect2">逆序</label>
+        <select id="bookSelect2"
+                name="bookSelect"
+                ng-options="option.value as option.text group by option.group for option in DemoCtrl.model.options | orderBy: '-value[0]'"
+                ng-model="DemoCtrl.model.optionValue"
+                ng-required="true"
+                ng-change="DemoCtrl.fn.optionValueChange(DemoCtrl.model.optionValue)">
+        </select>
+        <p ng-show="myForm.bookSelect.$valid" ng-style="DemoCtrl.fn.dynamicStyle(myForm.bookSelect)">选择合法</p>
+        <p ng-show="myForm.bookSelect.$error.required" ng-style="DemoCtrl.fn.dynamicStyle(myForm.bookSelect)">还没有选择啊~</p>
+        <p>选择的教程:<strong ng-bind="DemoCtrl.model.optionValue"></strong></p>
+    </form>
+
+    <h4>2、对象结构数据</h4>
+    <select ng-model="DemoCtrl.model.cityValue"
+            ng-options="cityKey as cityTxt for (cityKey, cityTxt) in DemoCtrl.model.cityMap">
+    </select>
+    <p>选择的城市:<strong ng-bind="DemoCtrl.model.cityMap[DemoCtrl.model.cityValue]"></strong></p>
+</div>
+<script>
+    var demo = angular.module('demo', []);
+
+    demo.controller('DemoController', ['$scope', '$log', function ($scope, $log) {
+
+        var ctrl = this;
+        ctrl.model = {};
+        ctrl.fn = {};
+
+        ctrl.model.options = [
+            {
+                value: 'angular',
+                text: 'angularJS教程',
+                group: 'JavaScript类'
+            },
+            {
+                value: 'backbone',
+                text: 'backboneJS教程',
+                group: 'JavaScript类'
+            },
+            {
+                value: 'SASS',
+                text: 'SASS教程',
+                group: 'CSS类'
+            },
+            {
+                value: 'LESS',
+                text: 'LESS教程',
+                group: 'CSS类'
+            },
+            {
+                value: '',
+                text: '',
+                group: '虚无类'
+            }
+        ];
+
+        ctrl.model.cityMap = {
+            'beijing': '北京',
+            'shanghai': '上海',
+            'chengdu': '成都',
+            'shenzhen': '深圳'
+        };
+
+        ctrl.model.cityValue = _.first(_.keys(ctrl.model.cityMap));
+
+        ctrl.model.optionValue = _.first(ctrl.model.options).value;
+        $log.info(ctrl.model.optionValue);
+
+        //Do not use $scope.$watch to listen model;
+        //It's hard to test and it's inefficient.
+        ctrl.fn.optionValueChange = function(optionValue) {
+            $log.info(ctrl.model.optionValue);
+        };
+
+        ctrl.fn.dynamicStyle = function(select) {
+            if(select.$error.required) {
+                return {
+                    color: 'blue'
+                };
+            } else if(select.$valid) {
+                return {
+                    color: 'red'
+                };
+            }
+        };
+
+    }]);
+</script>
+</body>
+</html>
