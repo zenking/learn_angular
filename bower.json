@@ -22,6 +22,7 @@
     "bootstrap": "~3.3.5",
     "underscore": "~1.8.3",
     "angular-i18n": "~1.4.8",
-    "angular-sanitize": "~1.4.8"
+    "angular-sanitize": "~1.4.8",
+    "qrcode.js": "https://github.com/davidshimjs/qrcodejs.git"
   }
 }
