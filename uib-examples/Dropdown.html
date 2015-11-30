@@ -37,7 +37,9 @@
                             </span>
 
                             <!-- Single button -->
-                            <div class="btn-group" uib-dropdown is-open="demo.model.isopen">
+                            <div class="btn-group"
+                                 uib-dropdown
+                                 is-open="demo.model.isopen" >
                                 <button id="single-button"
                                         type="button"
                                         class="btn btn-primary"
@@ -138,8 +140,47 @@
                             </script>
                         </div>
                         <div class="col-md-6">
+                            <p>
+                                你可以使用<code>is-open</code>属性或者在指令中添加 <code>&lt;a uib-dropdown-toggle&gt;</code>
+                                ，然后通过点击来显示和隐藏下拉菜单。<code>on-toggle</code>可选属性指定一个函数，当下拉菜单显示或隐藏时触发。
+                            </p>
 
+                            <p>
+                                通过在指令 <code>uib-dropdown</code>上指定 <code>dropdown-append-to-body</code>属性，可以将下拉菜单添加到body
+                                元素下。使用场景是，当下拉菜单的按钮在一个有 <code>overflow: hidden</code>属性的div中（这时候下拉菜单被hidden掉了），
+                                可以将下拉菜单添加到body下。
+                            </p>
 
+                            <p>
+                                在指令 <code>uib-dropdown</code>上添加 <code>uib-keyboard-nav</code>属性，可以开启键盘方向快捷键支持。
+                            </p>
+
+                            <p>
+                                默认的，不管点击下拉菜单本身还是下拉菜单以外的区域，下拉菜单会自动隐藏。可以通过设置 <code>auto-close</code>来改变这一行为：
+                            </p>
+
+                            <ul>
+                                <li>
+                                    <em><code>always</code>(默认)</em>
+                                    - 不管点击下拉菜单本身还是下拉菜单以外的区域，下拉菜单会自动隐藏。
+                                </li>
+
+                                <li>
+                                    <em><code>outsideClick</code></em>
+                                    - 只有点击下拉菜单元素以外区域时，才会隐藏下拉菜单。
+                                </li>
+
+                                <li>
+                                    <em><code>disabled</code></em>
+                                    - 禁止自动关闭下拉菜单。可以通过 <code>is-open</code>属性，手动控制显示或隐藏。
+                                </li>
+                            </ul>
+
+                            <p>
+                                可以使用 <code>template-url</code>属性来给下拉菜单指定模版。在通过ngRepeat指令渲染多个相似下拉菜单时很有用。
+                            </p>
+
+                            <p>例如：<code>&lt;ul class="uib-dropdown-menu" template-url="custom-dropdown.html"&gt;&lt;/ul&gt;</code></p>
                         </div>
                     </div>
                 </div>
