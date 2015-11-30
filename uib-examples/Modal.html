@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="demo">
+<head>
+    <meta charset="UTF-8">
+    <title>ui.bootstrap.modal用法</title>
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-animate/bower-angular-animate-1.4.8/angular-animate.js"></script>
+    <script src="../bower_components/angular-aria/angular-aria.js"></script>
+    <script src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="../bower_components/angular-i18n/angular-locale_zh-cn.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <section id="alert">
+                <div class="page-header">
+                    <h1>
+                        Modal
+                        <small>(ui.bootstrap.modal)</small>
+                    </h1>
+                </div>
+                <div class="row">
+                    <div ng-controller="DemoController as demo">
+                        <div class="col-md-6">
+                            <button type="button" class="btn btn-default" ng-click="demo.fn.open()">点击我！</button>
+                            <button type="button" class="btn btn-default" ng-click="demo.fn.open('lg')">大模态框</button>
+                            <button type="button" class="btn btn-default" ng-click="demo.fn.open('sm')">小模态框</button>
+                            <button type="button" class="btn btn-default" ng-click="demo.fn.toggleAnimation()">
+                                禁用/启用模态框动画
+                                ({{ demo.model.animationsEnabled }})
+                            </button>
+                            <div ng-show="demo.model.selected">从模态框选择的项目是: {{ demo.model.selected }}</div>
+                        </div>
+                        <div class="col-md-6">
+                            <p>
+                                <code>$uibModal</code>服务用来快速创建模态框。
+                            </p>
+
+                            <p>
+                                <code>$uibModal</code>服务对外只有一个方法: <code>open(options)</code>，options具体配置参数如下:
+                            </p>
+
+                            <ul>
+                                <li>
+                                    <em><code>templateUrl</code></em>
+                                    - 模态框模版路径
+                                </li>
+                                <li>
+                                    <em><code>template</code></em>
+                                    - 模态框内联模版
+                                </li>
+                                <li>
+                                    <em><code>scope</code></em>
+                                    - 指定模态框的作用域（实际上，<code>$uibModal</code>服务会在给定作用下创建一个子作用域）.默认值是
+                                    <code>$rootScope</code>
+                                </li>
+                                <li>
+                                    <em><code>controller</code></em>
+                                    - 给模态框实例指定控制器Controller - 接受"controller as"这样的语法。
+                                </li>
+                                <li>
+                                    <em><code>controllerAs</code></em>
+                                    - 指定控制器的实例
+                                </li>
+                                <li>
+                                    <em><code>bindToController</code></em>
+                                    -
+                                </li>
+                                <li>
+                                    <em><code>resolve</code></em>
+                                    - 指定该模态框控制器实例化之前的依赖，类似路由模块。
+                                </li>
+                                <li>
+                                    <em><code>animation</code></em>
+                                    - 是否开启模态框动画。不要改变已经显示的模态框的该值。
+                                </li>
+                                <li>
+                                    <em><code>backdrop</code></em>
+                                    - 模态框遮罩效果，默认值为true，点击模态框以外的区域会关闭模态框。
+                                    false，没有遮罩。设置为'static'，点击模态框以外的区域不会关闭模态框。
+                                </li>
+                                <li>
+                                    <em><code>keyboard</code></em>
+                                    - 是否可以通过按ESC键来关闭模态框，默认值是true。
+                                </li>
+                                <li>
+                                    <em><code>backdropClass</code></em>
+                                    - 打开模态框时，额外要添加到模态框遮罩元素上的class
+                                </li>
+                                <li>
+                                    <em><code>windowClass</code></em>
+                                    - 打开模态框时，额外的要添加到
+                                </li>
+                                <li>
+                                    <em><code></code></em>
+                                </li>
+                                <li>
+                                    <em><code></code></em>
+                                </li>
+                                <li>
+                                    <em><code></code></em>
+                                </li>
+                                <li>
+                                    <em><code></code></em>
+                                </li>
+                                <li>
+                                    <em><code></code></em>
+                                </li>
+                                <li>
+                                    <em><code></code></em>
+                                </li>
+                                <li>
+                                    <em><code></code></em>
+                                </li>
+                                <li>
+                                    <em><code></code></em>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-header">
+        <h3 class="modal-title">I'm a modal!</h3>
+    </div>
+    <div class="modal-body">
+        <ul>
+            <li ng-repeat="item in modal.items">
+                <a href="#" ng-click="$event.preventDefault(); modal.selected.item = item">
+                    {{ item }}
+                </a>
+            </li>
+        </ul>
+        Selected: <b>{{ modal.selected.item }}</b>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="modal.ok()">确认</button>
+        <button class="btn btn-warning" type="button" ng-click="modal.cancel()">取消</button>
+    </div>
+</script>
+
+<script>
+
+    angular.module('demo', [
+        'ui.bootstrap',
+        'ngAnimate',
+        'ngAria'
+    ]);
+
+    (function () {
+        angular
+                .module('demo')
+                .controller('DemoController', DemoController);
+
+        DemoController.$inject = ['$log', '$uibModal'];
+
+        function DemoController($log, $uibModal) {
+
+            var ctrl = this;
+            ctrl.model = {
+                items: ['item1', 'item2', 'item3'],
+                animationsEnabled: true,
+                selected: null
+            };
+
+            ctrl.fn = {
+                open: open,
+                toggleAnimation: toggleAnimation
+            };
+
+
+            function open(size) {
+
+                var modalInstance = $uibModal.open({
+                    animation: ctrl.model.animationsEnabled,
+                    templateUrl: 'myModalContent.html',
+                    controller: 'ModalInstanceCtrl as modal',
+                    size: size,
+                    resolve: {
+                        items: function () {
+                            return ctrl.model.items;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (selectedItem) {
+                    ctrl.model.selected = selectedItem;
+                }, function () {
+                    $log.info('模态框销毁于: ' + new Date());
+                });
+
+            }
+
+            function toggleAnimation() {
+                ctrl.model.animationsEnabled = !ctrl.model.animationsEnabled;
+            }
+
+        }
+
+
+        angular
+                .module('demo')
+                .controller('ModalInstanceCtrl', ModalInstanceCtrl);
+
+        ModalInstanceCtrl.$inject = ['$uibModalInstance', 'items'];
+
+        function ModalInstanceCtrl($uibModalInstance, items) {
+
+            var ctrl = this;
+
+            ctrl.items = items;
+
+            ctrl.selected = {
+                item: ctrl.items[0]
+            };
+
+            ctrl.ok = ok;
+            ctrl.cancel = cancel;
+
+            function ok() {
+                $uibModalInstance.close(ctrl.selected.item);
+            }
+
+            function cancel() {
+                $uibModalInstance.dismiss('cancel');
+            }
+
+        }
+    })();
+
+</script>
+</body>
+</html>
+
+
