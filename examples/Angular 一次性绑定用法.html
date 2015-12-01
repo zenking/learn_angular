@@ -9,11 +9,24 @@
 </head>
 <body>
 
+<p class="text-primary">
+    Angular给每一个绑定的数据都创建了一个watcher监视器。在每一个$digest循环阶段，每个绑定的值都会被求值计算并与其$digest循环之前的值
+    进行比较。这就叫“脏值检查”。
+</p>
+
+<p class="text-primary">
+    为了性能考虑，最多不要超过2000个watcher监视器。
+</p>
+
+<p class="text-primary">
+    怎么限制watcher监视器的数量呢？就要用到“一次性绑定”。
+</p>
+
 <div ng-controller="DemoController as demo">
     <div>
         <p>这里一次性绑定model</p>
         <p>
-            1.{{}}形式一次性绑定:<strong>{{::demo.model.data}}</strong>
+            1.插值形式一次性绑定:<strong>{{::demo.model.data}}</strong>
         </p>
         <p>
             2.用ng-bind一次性绑定:<strong ng-bind="::demo.model.data"></strong>
@@ -22,15 +35,22 @@
 
     <div>
         <p>
-            这里正常绑定model,但该model也不会发生变化了:
+            这里正常绑定model:
         </p>
         <p>
             <strong ng-bind="demo.model.data"></strong>
         </p>
     </div>
 
+    <div>
+        <p>在ngRepeat指令中使用一次性绑定</p>
+        <ul>
+            <li ng-repeat="item in ::demo.model.items">{{ ::item }}</li>
+        </ul>
+    </div>
 
-    <button class="btn btn-default" ng-click="setData()">修改不了一次性绑定过的model了</button>
+
+    <button class="btn btn-default" ng-click="demo.fn.setData()">改变数据，一次性绑定的视图不会再更新</button>
 </div>
 
 
@@ -49,7 +69,8 @@
 
             var ctrl = this;
             ctrl.model = {
-                data: 'angular'
+                data: 'angular',
+                items: [1, 2, 3, 4, 5, 6]
             };
 
             ctrl.fn = {
@@ -58,8 +79,10 @@
 
             function setData() {
                 ctrl.model.data = 'backbone';
+                ctrl.model.items.push(10);
+                $log.info('items\'s length is: ' + ctrl.model.items.length);
+                $log.info(ctrl.model.items);
             }
-
         }
     })();
 </script>
