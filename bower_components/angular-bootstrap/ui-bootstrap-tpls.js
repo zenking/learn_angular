@@ -4140,7 +4140,9 @@ angular.module('ui.bootstrap.modal', ['ui.bootstrap.stackedMap'])
                   });
 
                   ctrlInstance = $controller(modalOptions.controller, ctrlLocals);
-                  if (modalOptions.controllerAs) {
+                    debugger;
+
+                    if (modalOptions.controllerAs) {
                     if (modalOptions.bindToController) {
                       angular.extend(ctrlInstance, modalScope);
                     }
