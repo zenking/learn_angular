@@ -10,6 +10,7 @@
 * angular-i18n
 * angular-route
 * angular-sanitize
+* angular-messages
 * bootstrap
 * jquery
 * ng-file-upload
