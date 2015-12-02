@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="demo">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <script src="../../bower_components/angular/angular.js"></script>
+    <script src="../../bower_components/angular-route/angular-route.js"></script>
+    <script src="../../bower_components/angular-animate/bower-angular-animate-1.4.8/angular-animate.js"></script>
+    <style>
+        .view-animate-container {
+            position:relative;
+            height:100px;
+            background:white;
+            border:1px solid black;
+            overflow:hidden;
+        }
+
+        .view-animate {
+            padding:10px;
+        }
+
+        .view-animate.ng-enter, .view-animate.ng-leave {
+            transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+
+            display:block;
+            width:100%;
+            border-left:1px solid black;
+
+            position:absolute;
+            top:0;
+            left:0;
+            right:0;
+            bottom:0;
+            padding:10px;
+        }
+
+        .view-animate.ng-enter {
+            left:100%;
+        }
+        .view-animate.ng-enter.ng-enter-active {
+            left:0;
+        }
+        .view-animate.ng-leave.ng-leave-active {
+            left:-100%;
+        }
+    </style>
+</head>
+<body>
+
+<div ng-controller="MainController as main">
+
+    选择:
+    <a href="#/Book/Moby">Moby</a> |
+    <a href="#/Book/Moby/ch/1">Moby: Ch1</a> |
+    <a href="#/Book/Gatsby">Gatsby</a> |
+    <a href="#/Book/Gatsby/ch/4?key=value">Gatsby: Ch4</a> |
+    <a href="#/Book/Scarlet">Scarlet Letter</a><br/>
+
+    <div class="view-animate-container">
+        <div ng-view class="view-animate"></div>
+    </div>
+
+    <hr />
+
+    <pre>$location.path() = {{main.model.$location.path()}}</pre>
+    <pre>$route.current.templateUrl = {{main.model.$route.current.templateUrl}}</pre>
+    <pre>$route.current.params = {{main.model.$route.current.params}}</pre>
+    <pre>$routeParams = {{main.model.$routeParams}}</pre>
+
+</div>
+
+
+
+
+<script id="chapter.html" type="text/ng-template">
+    <div>
+        controller: {{chapter.model.name}}<br />
+        Book Id: {{chapter.model.params.bookId}}<br />
+        Chapter Id: {{chapter.model.params.chapterId}}
+    </div>
+</script>
+<script>
+
+    angular.module('demo', ['ngRoute', 'ngAnimate']);
+
+    (function () {
+        angular
+                .module('demo')
+                .config(config);
+
+        config.$inject = ['$routeProvider', '$locationProvider'];
+
+        function config($routeProvider, $locationProvider) {
+
+            $routeProvider
+                    .when('/Book/:bookId', {
+                        templateUrl: './book.html',
+                        controller: 'BookController',
+                        controllerAs: 'book'
+                    })
+                    .when('/Book/:bookId/ch/:chapterId', {
+                        templateUrl: 'chapter.html',
+                        controller: 'ChapterController as chapter'
+                    })
+
+        }
+    })();
+
+    (function () {
+        angular
+                .module('demo')
+                .controller('MainController', MainController);
+
+        MainController.$inject = ['$log', '$route', '$routeParams', '$location'];
+
+        function MainController($log, $route, $routeParams, $location) {
+
+            var ctrl = this;
+            ctrl.model = {
+                $location: $location,
+                $route : $route,
+                $routeParams: $routeParams
+            };
+            ctrl.fn = {};
+
+        }
+    })();
+
+    (function () {
+        angular
+                .module('demo')
+                .controller('BookController', BookController);
+
+        BookController.$inject = ['$log','$routeParams'];
+
+        function BookController($log, $routeParams) {
+
+            var ctrl = this;
+            ctrl.model = {
+                name: 'BookController',
+                params: $routeParams
+            };
+            ctrl.fn = {};
+
+        }
+    })();
+
+
+    (function () {
+        angular
+                .module('demo')
+                .controller('ChapterController', ChapterController);
+
+        ChapterController.$inject = ['$log', '$routeParams'];
+
+        function ChapterController($log, $routeParams) {
+
+            var ctrl = this;
+            ctrl.model = {
+                name: 'ChapterController',
+                params: $routeParams
+            };
+            ctrl.fn = {};
+
+        }
+    })();
+
+</script>
+</body>
+</html>
+
+
