@@ -11,6 +11,7 @@
 * angular-route
 * angular-sanitize
 * angular-messages
+* angular-resource
 * bootstrap
 * jquery
 * ng-file-upload

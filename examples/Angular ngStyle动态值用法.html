@@ -14,6 +14,8 @@
     <div ng-style="{'background-color': '{{demo.model.color}}', 'width': demo.model.width, 'height': demo.model.height}">
 
     </div>
+
+    <button ng-click="demo.fn.close()">关闭窗口</button>
 </div>
 
 
@@ -26,9 +28,9 @@
                 .module('demo')
                 .controller('DemoController', DemoController);
 
-        DemoController.$inject = ['$log'];
+        DemoController.$inject = ['$log', '$window'];
 
-        function DemoController($log) {
+        function DemoController($log, $window) {
 
             var ctrl = this;
             ctrl.model = {
@@ -36,7 +38,13 @@
                 width: '100px',
                 height: '100px'
             };
-            ctrl.fn = {};
+            ctrl.fn = {
+                close: close
+            };
+
+            function close() {
+                $window.close();
+            }
 
         }
     })();
