@@ -90,10 +90,11 @@
                 .module('demo')
                 .run(run);
 
-        run.$inject = ['$rootScope', '$location', 'UserService', '$log'];
+        run.$inject = ['$rootScope', '$location', 'UserService', '$log', '$route'];
 
-        function run($rootScope, $location, UserService, $log) {
+        function run($rootScope, $location, UserService, $log, $route) {
 
+            debugger;
             $rootScope.$on('$routeChangeStart', function (event, next, current) {
 
                 var path = $location.path();
@@ -105,7 +106,7 @@
                     }
                     $log.info($rootScope.path);
 
-                    if(!UserService.isLogin && next.$$route.requireLogin) {
+                    if(!UserService.isLogin && $route.routes[path].requireLogin) {
                         event.preventDefault();
                         //search清除url上的查询字符串
                         $location.search({}).path('/login');
