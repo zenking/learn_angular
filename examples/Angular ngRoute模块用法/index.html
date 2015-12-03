@@ -10,40 +10,42 @@
     <script src="../../bower_components/angular-animate/bower-angular-animate-1.4.8/angular-animate.js"></script>
     <style>
         .view-animate-container {
-            position:relative;
-            height:100px;
-            background:white;
-            border:1px solid black;
-            overflow:hidden;
+            position: relative;
+            height: 400px;
+            background: white;
+            border: 1px solid black;
+            overflow: hidden;
         }
 
         .view-animate {
-            padding:10px;
+            padding: 10px;
         }
 
         .view-animate.ng-enter, .view-animate.ng-leave {
-            transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
+            transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
 
-            display:block;
-            width:100%;
-            border-left:1px solid black;
+            display: block;
+            width: 100%;
+            border-left: 1px solid black;
 
-            position:absolute;
-            top:0;
-            left:0;
-            right:0;
-            bottom:0;
-            padding:10px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 10px;
         }
 
         .view-animate.ng-enter {
-            left:100%;
+            left: 100%;
         }
+
         .view-animate.ng-enter.ng-enter-active {
-            left:0;
+            left: 0;
         }
+
         .view-animate.ng-leave.ng-leave-active {
-            left:-100%;
+            left: -100%;
         }
     </style>
 </head>
@@ -62,7 +64,7 @@
         <div ng-view class="view-animate"></div>
     </div>
 
-    <hr />
+    <hr/>
 
     <pre>$location.path() = {{main.model.$location.path()}}</pre>
     <pre>$route.current.templateUrl = {{main.model.$route.current.templateUrl}}</pre>
@@ -72,18 +74,48 @@
 </div>
 
 
-
-
 <script id="chapter.html" type="text/ng-template">
     <div>
-        controller: {{chapter.model.name}}<br />
-        Book Id: {{chapter.model.params.bookId}}<br />
+        controller: {{chapter.model.name}}<br/>
+        Book Id: {{chapter.model.params.bookId}}<br/>
         Chapter Id: {{chapter.model.params.chapterId}}
     </div>
 </script>
 <script>
 
     angular.module('demo', ['ngRoute', 'ngAnimate']);
+
+    (function () {
+        angular
+                .module('demo')
+                .run(run);
+
+        run.$inject = ['$rootScope', '$location', 'UserService', '$log'];
+
+        function run($rootScope, $location, UserService, $log) {
+
+            $rootScope.$on('$routeChangeStart', function (event, next, current) {
+
+                var path = $location.path();
+
+                if(next) {
+                    $log.info(next);
+                    if(path !== '/login') {
+                        $rootScope.path = path;
+                    }
+                    $log.info($rootScope.path);
+
+                    if(!UserService.isLogin && next.$$route.requireLogin) {
+                        event.preventDefault();
+                        //search清除url上的查询字符串
+                        $location.search({}).path('/login');
+                    }
+                }
+
+            });
+
+        }
+    })();
 
     (function () {
         angular
@@ -98,12 +130,21 @@
                     .when('/Book/:bookId', {
                         templateUrl: './book.html',
                         controller: 'BookController',
-                        controllerAs: 'book'
+                        controllerAs: 'book',
+                        requireLogin: false
                     })
                     .when('/Book/:bookId/ch/:chapterId', {
                         templateUrl: 'chapter.html',
-                        controller: 'ChapterController as chapter'
+                        controller: 'ChapterController as chapter',
+                        requireLogin: true
                     })
+                    .when('/login', {
+                        templateUrl: 'login.html',
+                        controller: 'LoginController as login'
+                    })
+                    .otherwise({
+                        redirectTo: '/login'
+                    });
 
         }
     })();
@@ -120,7 +161,7 @@
             var ctrl = this;
             ctrl.model = {
                 $location: $location,
-                $route : $route,
+                $route: $route,
                 $routeParams: $routeParams
             };
             ctrl.fn = {};
@@ -133,9 +174,9 @@
                 .module('demo')
                 .controller('BookController', BookController);
 
-        BookController.$inject = ['$log','$routeParams'];
+        BookController.$inject = ['$log', '$routeParams', '$scope'];
 
-        function BookController($log, $routeParams) {
+        function BookController($log, $routeParams, $scope) {
 
             var ctrl = this;
             ctrl.model = {
@@ -143,6 +184,10 @@
                 params: $routeParams
             };
             ctrl.fn = {};
+
+            $scope.$on('$viewContentLoaded', function (event) {
+                console.log('content loaded!', event)
+            });
 
         }
     })();
@@ -163,6 +208,68 @@
                 params: $routeParams
             };
             ctrl.fn = {};
+
+        }
+    })();
+
+
+    (function () {
+
+        angular
+                .module('demo')
+                .controller('LoginController', LoginController);
+
+        LoginController.$inject = ['$log', 'UserService', '$rootScope', '$location'];
+
+        function LoginController($log, UserService, $rootScope, $location) {
+
+            var ctrl = this;
+
+            ctrl.username = '';
+            ctrl.password = '';
+
+            ctrl.login = login;
+
+            function login() {
+                UserService.login(ctrl.username, ctrl.password).then(function(isLogin) {
+                    if(isLogin) {
+                        $location.path($rootScope.path);
+                    }
+                });
+            }
+        }
+    })();
+
+
+    (function () {
+        angular
+                .module('demo')
+                .service('UserService', UserService);
+
+        UserService.$inject = ['$http'];
+
+        function UserService($http) {
+
+            var service = this;
+
+            service.login = login;
+            service.isLogin = false;
+            service.username = '';
+
+            function login(username, password) {
+                return $http.post('../../data/login.json', {
+                    username: username,
+                    password: password
+                }).then(function (rep) {
+                    if(rep.data.result === 'success') {
+                        service.isLogin = true;
+                        service.username = username;
+                        return true;
+                    }
+                });
+            }
+
+            return service;
 
         }
     })();
