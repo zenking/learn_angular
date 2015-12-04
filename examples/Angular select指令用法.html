@@ -11,6 +11,9 @@
     <h4>1、数组结构数据，value字段是选择的值，text字段是视图上显示的值，根据group字段进行分组，根据value字段的首字母进行排序。</h4>
 
     <form name="myForm" novalidate>
+
+
+
         <label for="bookSelect1">正序</label>
         <select id="bookSelect1"
                 name="bookSelect"
@@ -19,18 +22,44 @@
                 ng-required="true"
                 ng-change="DemoCtrl.fn.optionValueChange(DemoCtrl.model.optionValue)">
         </select>
+
+        <!-- 不使用select as-->
+        <select id="bookSelect3"
+                name="bookSelect3"
+                ng-options="option.text for option in DemoCtrl.model.options"
+                ng-model="DemoCtrl.model.option"
+                ng-required="true"
+                ng-change="DemoCtrl.fn.optionChange()">
+        </select>
+
+
+        <select id="bookSelect4"
+                name="bookSelect4"
+                ng-options="option.text for option in options"
+                ng-model="option"
+                ng-required="true"
+                ng-change="DemoCtrl.fn.optionChange()">
+        </select>
+
+
         <label for="bookSelect2">逆序</label>
         <select id="bookSelect2"
                 name="bookSelect"
                 ng-options="option.value as option.text group by option.group for option in DemoCtrl.model.options | orderBy: '-value[0]'"
                 ng-model="DemoCtrl.model.optionValue"
                 ng-required="true"
-                ng-change="DemoCtrl.fn.optionValueChange(DemoCtrl.model.optionValue)">
+                ng-change="DemoCtrl.fn.optionChange()">
         </select>
+
+
+
         <p ng-show="myForm.bookSelect.$valid" ng-style="DemoCtrl.fn.dynamicStyle(myForm.bookSelect)">选择合法</p>
         <p ng-show="myForm.bookSelect.$error.required" ng-style="DemoCtrl.fn.dynamicStyle(myForm.bookSelect)">还没有选择啊~</p>
         <p>选择的教程:<strong ng-bind="DemoCtrl.model.optionValue"></strong></p>
     </form>
+
+
+
 
     <h4>2、对象结构数据</h4>
     <select ng-model="DemoCtrl.model.cityValue"
@@ -47,7 +76,7 @@
         ctrl.model = {};
         ctrl.fn = {};
 
-        ctrl.model.options = [
+        $scope.options = ctrl.model.options = [
             {
                 value: 'angular',
                 text: 'angularJS教程',
@@ -75,6 +104,8 @@
             }
         ];
 
+        $scope.option = $scope.options[0];
+
         ctrl.model.cityMap = {
             'beijing': '北京',
             'shanghai': '上海',
@@ -85,7 +116,10 @@
         ctrl.model.cityValue = _.first(_.keys(ctrl.model.cityMap));
 
         ctrl.model.optionValue = _.first(ctrl.model.options).value;
+        ctrl.model.option = _.first(ctrl.model.options);
+
         $log.info(ctrl.model.optionValue);
+        $log.info(ctrl.model.option);
 
         //Do not use $scope.$watch to listen model;
         //It's hard to test and it's inefficient.
@@ -104,6 +138,11 @@
                 };
             }
         };
+
+        ctrl.fn.optionChange = function() {
+//            $log.info(ctrl.model.option);
+            $log.info($scope.option)
+        }
 
     }]);
 </script>
