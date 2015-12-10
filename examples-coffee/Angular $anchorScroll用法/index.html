@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="demo">
+<head>
+    <meta charset="UTF-8">
+    <title>Angular $anchorScroll用法</title>
+    <style>
+        #A{
+            position: absolute;
+            bottom: -200px;
+        }
+
+        #B{
+            position: absolute;
+            bottom: -1000px;
+        }
+
+        #C{
+            position: absolute;
+            bottom: -2000px;
+        }
+    </style>
+</head>
+<body>
+
+<div ng-controller="DemoController as demo">
+    <a ng-click="demo.fn.goAnchor('A')">锚点A</a>
+    <a ng-click="demo.fn.goAnchor('B')">锚点B</a>
+    <label>
+        输入跳转锚点Y坐标偏移
+        <input type="text" ng-model="demo.model.yOffset"/>
+    </label>
+
+    <p id="A">点击锚点A跳到这里</p>
+    <p id="B">点击锚点B跳到这里</p>
+    <p id="C">其他内容</p>
+</div>
+
+<script src="../../bower_components/angular/angular.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
+
+
