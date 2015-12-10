@@ -2,11 +2,12 @@
 <html lang="en" ng-app="demo">
 <head>
     <meta charset="UTF-8">
-    <title>demo-2(demo-1例子使用JavaScript动画重写)</title>
+    <title>demo-3(demo-1例子使用JavaScript动画重写)</title>
     <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap-theme.min.css"/>
     <script src="../../bower_components/angular/angular.js"></script>
     <script src="../../bower_components/angular-animate/bower-angular-animate-1.4.8/angular-animate.js"></script>
+    <script src="../../bower_components/jquery/dist/jquery.js"></script>
 </head>
 <body>
 
@@ -138,7 +139,9 @@
                 .module('demo')
                 .animation('.right-left', rightLeft);
 
-        function rightLeft() {
+        rightLeft.$inject = ['$log'];
+
+        function rightLeft($log) {
 
             var animation = {
                 enter: enter,
@@ -146,18 +149,41 @@
             };
             return animation;
 
+            //元素进入动画
             function enter(element, done) {
-                element
-                        .css({
-                            'display': 'none',
-                            'transform': 'translateX(0)'
-                        });
-
+                //这里一定要先设置元素的display样式为none,否则一旦添加元素，元素就直接显示了，而不会fadeIn了，只有display为none的元素用fadeIn才有效果
+                $(element).css('display', 'none').fadeIn(500, done);
             }
+
+            //元素离开动画
+            function leave(element, done) {
+                $(element).fadeOut(500, done);
+            }
+        }
+    })();
+
+    (function() {
+        angular
+            .module('demo')
+            .animation('.left-left', leftLeft);
+
+        leftLeft.$inject = [];
+
+        function leftLeft() {
+            var animation = {
+                enter: enter,
+                leave: leave
+            };
+            return animation;
+
+            function enter(element, done) {
+                $(element).css('display', 'none').fadeIn(500, done);
+            }   
 
             function leave(element, done) {
-
+                $(element).fadeOut(500, done);
             }
+
         }
     })();
 </script>
