@@ -36,12 +36,15 @@
       };
       about = {
         name: 'about',
-        url: '/about',
+        params: {
+          'aboutId': '123'
+        },
+        url: '/about/:aboutId',
         template: "<div class=\"container-fluid\">\n	<p>This is about page</p>\n</div>"
       };
       contactDetail = {
         name: 'contact.detail',
-        url: '^/detail/{contactId}',
+        url: '^/detail/{contactId}?from&to',
         parent: 'contact',
         templateUrl: './contact/contactDetail/contactDetail.tpl.html',
         controller: 'ContactDetailController',

@@ -35,7 +35,8 @@ class config
 
 		about =
 			name: 'about'
-			url: '/about'
+			params: {'aboutId': '123'}
+			url: '/about/:aboutId'
 			template: """
 				<div class="container-fluid">
 					<p>This is about page</p>
@@ -45,7 +46,7 @@ class config
 		contactDetail =
 			name: 'contact.detail'
 			#和'/detail/:contactId'功能相同
-			url: '^/detail/{contactId}'
+			url: '^/detail/{contactId}?from&to'
 			parent: 'contact'
 			templateUrl: './contact/contactDetail/contactDetail.tpl.html'
 			controller: 'ContactDetailController'
