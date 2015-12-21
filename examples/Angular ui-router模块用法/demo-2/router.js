@@ -6,7 +6,7 @@
     config.$inject = ['$stateProvider', '$urlRouterProvider'];
 
     function config($stateProvider, $urlRouterProvider) {
-      var about, contact, contactList, home;
+      var about, contact, contactDetail, contactList, home;
       $urlRouterProvider.when('/', 'home').otherwise('/home');
       home = {
         name: 'home',
@@ -28,7 +28,7 @@
       };
       contactList = {
         name: 'contact.list',
-        url: '/list',
+        url: '^/list',
         parent: contact,
         templateUrl: './contact/contactList/contactList.tpl.html',
         controller: 'ContactListController',
@@ -39,7 +39,15 @@
         url: '/about',
         template: "<div class=\"container-fluid\">\n	<p>This is about page</p>\n</div>"
       };
-      $stateProvider.state(home).state(contact).state(contactList).state(about);
+      contactDetail = {
+        name: 'contact.detail',
+        url: '^/detail/{contactId}',
+        parent: 'contact',
+        templateUrl: './contact/contactDetail/contactDetail.tpl.html',
+        controller: 'ContactDetailController',
+        controllerAs: 'contactDetail'
+      };
+      $stateProvider.state(home).state(contact).state(contactList).state(contactDetail).state(about);
       return;
     }
 

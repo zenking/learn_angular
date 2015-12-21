@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "contactDetail.controller.js",
+  "sourceRoot": "",
+  "sources": [
+    "contactDetail.controller.coffee"
+  ],
+  "names": [],
+  "mappings": ";AACA;AAAA,MAAA;;EAAM;IACL,uBAAC,CAAA,OAAD,GAAW,CAAC,MAAD,EAAS,cAAT;;IAEE,iCAAC,IAAD,EAAO,YAAP;AACZ,UAAA;MAAA,EAAA,GAAK;MAEL,IAAI,CAAC,IAAL,CAAU,YAAV;MACA,EAAE,CAAC,YAAH,GAAkB;AAElB;IANY;;;;;;EAQd,OACA,CAAC,MADD,CACQ,KADR,CAEA,CAAC,UAFD,CAEY,yBAFZ,EAEuC,uBAFvC;AAXA"
+}

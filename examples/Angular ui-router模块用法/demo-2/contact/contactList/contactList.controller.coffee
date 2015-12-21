@@ -3,12 +3,12 @@ class ContactListController
 
 	constructor: ($log)->
 		vm = @
-		vm.list = [
-			'老王',
-			'小头爸爸'
-			'大头儿子'
-			'大头儿子妈'
-		]
+		vm.list =
+			1: '老王',
+			2: '小头爸爸'
+			3: '大头儿子'
+			4: '大头儿子妈'
+
 		return
 
 angular

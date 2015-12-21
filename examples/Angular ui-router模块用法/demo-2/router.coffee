@@ -26,7 +26,8 @@ class config
 
 		contactList =
 			name: 'contact.list'
-			url: '/list'
+			#url前加'^'符号，则该url的路径变成绝对路径，此例不加'^'则url为/contact/list，加了以后变位/list
+			url: '^/list'
 			parent: contact
 			templateUrl: './contact/contactList/contactList.tpl.html'
 			controller: 'ContactListController'
@@ -41,10 +42,21 @@ class config
 				</div>
 			"""
 
+		contactDetail =
+			name: 'contact.detail'
+			#和'/detail/:contactId'功能相同
+			url: '^/detail/{contactId}'
+			parent: 'contact'
+			templateUrl: './contact/contactDetail/contactDetail.tpl.html'
+			controller: 'ContactDetailController'
+			controllerAs: 'contactDetail'
+
+
 		$stateProvider
 			.state home
 			.state contact
 			.state contactList
+			.state contactDetail
 			.state about
 
 		return
