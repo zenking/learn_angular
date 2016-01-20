@@ -12453,6 +12453,7 @@ function $LogProvider() {
 
       /**
        * @ngdoc method
+       * @ngdoc method
        * @name $log#warn
        *
        * @description
