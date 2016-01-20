@@ -16,6 +16,10 @@
     </div>
 
     <button ng-click="demo.fn.close()">关闭窗口</button>
+
+    <ul>
+        <li ng-repeat="data in demo.datas" ng-bind="data.txt" ng-style="demo.fn.style(demo.model.index)"></li>
+    </ul>
 </div>
 
 
@@ -28,19 +32,53 @@
                 .module('demo')
                 .controller('DemoController', DemoController);
 
-        DemoController.$inject = ['$log', '$window'];
+        DemoController.$inject = ['$log', '$window', '$timeout'];
 
-        function DemoController($log, $window) {
+        function DemoController($log, $window, $timeout) {
 
             var ctrl = this;
             ctrl.model = {
+                index: 0,
                 color: 'red',
                 width: '100px',
                 height: '100px'
             };
+            ctrl.datas = [
+                {
+                    txt: 'angular权威教程',
+                    id: 1
+                },
+                {
+                    txt: 'backbone应用开发',
+                    id: 2
+                },
+                {
+                    txt: 'angular权威教程',
+                    id: 3
+                }
+
+            ];
+
+            $timeout(function() {
+                ctrl.datas = [
+                    {
+                        txt: 'jquery权威指南',
+                        id: 5
+                    }
+                ];
+            }, 3000);
+
             ctrl.fn = {
-                close: close
+                close: close,
+                style: style
             };
+
+            function style($index) {
+                console.log($index);
+                return {
+                    zIndex: $index
+                }
+            }
 
             function close() {
                 $window.close();
