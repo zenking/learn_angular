@@ -3,13 +3,17 @@
   var HomeController;
 
   HomeController = (function() {
-    HomeController.$inject = ['$log', 'name'];
+    HomeController.$inject = ['$log', 'name', '$timeout'];
 
-    function HomeController($log, name) {
-      var vm;
+    function HomeController($log, name, $timeout) {
+      var setInputFocus, vm;
       vm = this;
       vm.content = 'This is home page';
       vm.name = name;
+      setInputFocus = function() {
+        return document.querySelector('input').focus();
+      };
+      setInputFocus();
       return;
     }
 
